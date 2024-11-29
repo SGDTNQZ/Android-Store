@@ -15,6 +15,9 @@
         android:id="@+id/catalog"
         android:name="com.projects.androidsneakerstore.catalog.CatalogFragment">
 
+        <action
+            android:id="@+id/action_catalog_to_login"
+            app:destination="@id/login" />
     </fragment>
 
 </navigation>

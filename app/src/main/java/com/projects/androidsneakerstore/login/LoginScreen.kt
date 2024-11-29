@@ -1,5 +1,6 @@
 package com.projects.androidsneakerstore.login
 
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Info
@@ -28,8 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +48,9 @@ import androidx.compose.ui.unit.sp
 fun LoginScreen(onLoginClick : () -> Unit){
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val usernameFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
@@ -49,10 +59,18 @@ fun LoginScreen(onLoginClick : () -> Unit){
         ){
             item (key = "Header"){ Header() }
             item (key = "Username TextField"){
-                UsernameTextField(username)
+                UsernameTextField(
+                    username,
+                    usernameFocusRequester,
+                    passwordFocusRequester
+                )
             }
             item (key = "Password TextField"){
-                PasswordTextField(password)
+                PasswordTextField(
+                    password,
+                    passwordFocusRequester,
+                    onLoginClick
+                )
             }
             item { LoginButton(onLoginClick = onLoginClick) }
         }
@@ -83,7 +101,11 @@ fun LoginButton(onLoginClick: () -> Unit){
 }
 
 @Composable
-fun PasswordTextField(password: MutableState<String>) {
+fun PasswordTextField(
+    password: MutableState<String>,
+    passwordFocusRequester: FocusRequester,
+    onLoginClick: () -> Unit
+) {
     val showPassword = remember { mutableStateOf(false) }
 
     Row(
@@ -92,7 +114,8 @@ fun PasswordTextField(password: MutableState<String>) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp)),
+                .clip(RoundedCornerShape(4.dp))
+                .focusRequester(passwordFocusRequester),
             value = password.value,
             onValueChange = {
                 password.value = it
@@ -106,7 +129,6 @@ fun PasswordTextField(password: MutableState<String>) {
                     lineHeight = 21.sp,
                     color = Color(0xFF8E8E93),
                     overflow = TextOverflow.Ellipsis
-
                 )
             },
             visualTransformation = if (showPassword.value) {
@@ -114,6 +136,13 @@ fun PasswordTextField(password: MutableState<String>) {
             } else {
                 PasswordVisualTransformation()
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {onLoginClick()}
+            ),
             trailingIcon = {
                 IconButton(onClick = { showPassword.value = !showPassword.value }) {
                     Icon(
@@ -135,20 +164,33 @@ fun PasswordTextField(password: MutableState<String>) {
 }
 
 @Composable
-fun UsernameTextField(username : MutableState<String>){
+fun UsernameTextField(
+    username : MutableState<String>,
+    usernameFocusRequester : FocusRequester,
+    passwordFocusRequester : FocusRequester
+){
     Row (
-        modifier = Modifier.padding(top = 52.dp, start = 16.dp, end = 16.dp)
+        modifier = Modifier
+            .padding(top = 52.dp, start = 16.dp, end = 16.dp)
 
     ){
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(4.dp))
+                .focusRequester(usernameFocusRequester),
             value = username.value,
             onValueChange = {
                 username.value = it
             },
             maxLines = 1,
-
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Go
+            ),
+            keyboardActions = KeyboardActions(
+                onGo = { passwordFocusRequester.requestFocus() }
+            ),
             placeholder = {
                 Text(
                     text = "Username",
@@ -194,7 +236,8 @@ fun Header(){
             fontWeight = FontWeight(600),
             lineHeight = 22.sp,
             textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .padding(vertical = 10.dp),
 
         )

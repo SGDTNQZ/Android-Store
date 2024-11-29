@@ -17,7 +17,13 @@ class CatalogFragment  : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply{
         setContent{
-            CatalogScreen()
+            val navController = findNavController()
+
+            CatalogScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
