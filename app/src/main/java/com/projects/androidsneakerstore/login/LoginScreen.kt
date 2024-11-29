@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -173,7 +174,9 @@ fun UsernameTextField(username : MutableState<String>){
 fun Header(){
     Row (
         modifier = Modifier
-            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
             onClick = {},
@@ -192,6 +195,8 @@ fun Header(){
             lineHeight = 22.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(1f)
+                .padding(vertical = 10.dp),
+
         )
     }
 }
