@@ -1,7 +1,5 @@
 package com.projects.androidsneakerstore.login
 
-import android.provider.ContactsContract.CommonDataKinds.Email
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize

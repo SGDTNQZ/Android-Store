@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.projects.androidsneakerstore.login.LoginScreen
 
 class CatalogFragment  : Fragment() {
     override fun onCreateView(
