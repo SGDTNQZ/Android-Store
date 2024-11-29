@@ -1,13 +1,13 @@
 package com.projects.androidsneakerstore.login
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -49,28 +49,24 @@ fun LoginScreen(onLoginClick : () -> Unit){
     val usernameFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
 
-        LazyColumn (
+        Column (
             modifier = Modifier
                 .fillMaxSize()
                 .safeDrawingPadding(),
-            contentPadding = PaddingValues(vertical = 16.dp)
         ){
-            item (key = "Header"){ Header() }
-            item (key = "Username TextField"){
-                UsernameTextField(
-                    username,
-                    usernameFocusRequester,
-                    passwordFocusRequester
-                )
-            }
-            item (key = "Password TextField"){
-                PasswordTextField(
-                    password,
-                    passwordFocusRequester,
-                    onLoginClick
-                )
-            }
-            item { LoginButton(onLoginClick = onLoginClick) }
+            Header()
+            UsernameTextField(
+                username,
+                usernameFocusRequester,
+                passwordFocusRequester
+            )
+            PasswordTextField(
+                password,
+                passwordFocusRequester,
+                onLoginClick
+            )
+            Spacer(Modifier.weight(1f))
+            LoginButton(onLoginClick = onLoginClick)
         }
 }
 
